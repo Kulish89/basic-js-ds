@@ -1,6 +1,6 @@
-const { NotImplementedError } = require('../extensions/index.js');
+const { NotImplementedError } = require("../extensions/index.js");
 
-// const { ListNode } = require('../extensions/list-node.js');
+const { ListNode } = require("../extensions/list-node.js");
 
 /**
  * Given a singly linked list of integers l and an integer k,
@@ -22,11 +22,81 @@ const { NotImplementedError } = require('../extensions/index.js');
  *   }
  * }
  */
-function removeKFromList(/* l, k */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+class LinkedList {
+  constructor() {
+    this.head = null;
+    this.length = 0;
+  }
+  add(value) {
+    if (this.length === 0) {
+      this.head = new ListNode(value);
+    } else {
+      let current = this.head;
+
+      while (current.next) {
+        current = current.next;
+      }
+
+      current.next = new ListNode(value);
+    }
+
+    this.length++;
+  }
+  removeAt(position) {
+    if (position < 0 || this.length <= position) {
+      return null;
+    }
+    let current = this.head;
+    if (position === 0) {
+      this.head = current.next;
+    } else {
+      let prev = null;
+      let index = 0;
+
+      while (index < position) {
+        prev = current;
+        current = current.next;
+        index++;
+      }
+      prev.next = current.next;
+    }
+
+    this.length--;
+    return current.value;
+  }
+
+  remove(element) {
+    for (let position of this.indexOf(element)) {
+      this.removeAt(position);
+    }
+  }
+  indexOf(element) {
+    let current = this.head;
+    let index = 0;
+    let indexes = [];
+
+    while (current) {
+      if (current.value === element) {
+        indexes.push(index);
+      }
+
+      current = current.next;
+      index++;
+    }
+
+    return indexes.length ? indexes : -1;
+  }
+}
+
+function removeKFromList(l, k) {
+  let newList = new LinkedList();
+  for (let val of l) {
+    newList.add(val);
+  }
+  newList.remove(k);
+  return newList;
 }
 
 module.exports = {
-  removeKFromList
+  removeKFromList,
 };
